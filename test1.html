@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLASH CLICK - Capture Your Story</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Embedded CSS from style.css -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Overall dark background, with sections breaking it */
+            background-color: #0d0d0d; /* Very dark grey/black */
+            color: #e0e0e0; /* Off-white for general text */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        /* Custom gradient for buttons and accents - now Sky Blue */
+        .btn-gradient {
+            background: linear-gradient(90deg, #00BFFF, #00FFFF); /* Deep Sky Blue to Cyan */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 191, 255, 0.4); /* Shadow with sky blue tint */
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #00BFFF, #00FFFF); /* Deep Sky Blue to Cyan */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Smooth scroll for navigation */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Styling for the video placeholder */
+        .video-placeholder {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #222; /* Darker grey */
+            border-radius: 1.5rem; /* rounded-3xl */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #999;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .video-placeholder::before {
+            content: 'Your Epic Reel Here';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        /* SVG icon styling for services */
+        .service-icon {
+            width: 3rem; /* equivalent to w-12 */
+            height: 3rem; /* equivalent to h-12 */
+            margin-bottom: 0.75rem; /* equivalent to mb-3 */
+            color: #00BFFF; /* Deep Sky Blue for icons */
+        }
+        /* Specific styles for white sections */
+        .bg-white-section {
+            background-color: #ffffff;
+            color: #1a1a1a; /* Dark text on white background */
+        }
+        .bg-white-section .text-gradient {
+            /* On white background, gradient should be visible */
+            -webkit-text-fill-color: initial; /* Reset to allow gradient effect */
+            background: linear-gradient(90deg, #00BFFF, #00FFFF);
+            -webkit-background-clip: text;
+        }
+        .bg-white-section .text-gray-300,
+        .bg-white-section .text-gray-400 {
+            color: #333333; /* Darker grey for text on white */
+        }
+        .bg-white-section .bg-gray-800 {
+            background-color: #f0f0f0; /* Lighter card background on white section */
+            color: #1a1a1a;
+        }
+        .bg-white-section .bg-gray-800 .text-white {
+            color: #1a1a1a; /* Dark text for card titles on light cards */
+        }
+        .bg-white-section .bg-gray-800 .text-gray-300 {
+            color: #444444; /* Darker text for card descriptions */
+        }
+        .bg-white-section .border-purple-500,
+        .bg-white-section .border-pink-500 {
+            border-color: #00BFFF; /* Sky blue border on hover */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-80 backdrop-blur-sm p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center px-4 md:px-0">
+            <!-- Logo/Brand Name -->
+            <a href="#hero" class="text-2xl font-bold text-gradient">FLASH CLICK</a>
+
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex space-x-6">
+                <a href="#services" class="text-gray-300 hover:text-white transition-colors duration-300">Services</a>
+                <a href="#portfolio" class="text-gray-300 hover:text-white transition-colors duration-300">Portfolio</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors duration-300">About Us</a>
+                <a href="#contact" class="btn-gradient text-white px-5 py-2 rounded-full font-medium shadow-lg hover:shadow-xl">Book Now</a>
+            </div>
+
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-black bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8 text-xl">
+            <button id="close-mobile-menu" class="absolute top-6 right-6 text-gray-300 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="#services" class="text-gray-300 hover:text-white transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Services</a>
+            <a href="#portfolio" class="text-gray-300 hover:text-white transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Portfolio</a>
+            <a href="#about" class="text-gray-300 hover:text-white transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About Us</a>
+            <a href="#contact" class="btn-gradient text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Book Now</a>
+        </div>
+    </nav>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center p-6 md:p-12 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/1a1a1a/e0e0e0?text=Dynamic+Background+Video');">
+            <div class="absolute inset-0 bg-black opacity-70"></div>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-white">
+                    <span class="text-gradient">FLASH CLICK</span><br>
+                    Capture Your Story.
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-10">
+                    Your Real Moments In Reels. Instant Reels Maker & Story Teller.
+                </p>
+                <a href="#contact" class="btn-gradient text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl animate-pulse">
+                    Book Your Epic Reel Now!
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section - Now with White Background -->
+        <section id="about" class="py-16 md:py-24 bg-white-section">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-gradient">Who We Are</h2>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 leading-relaxed">
+                    At <span class="font-semibold text-black">FLASH CLICK</span>, we believe every moment deserves to be a masterpiece. We specialize in creating dynamic, authentic, and high-quality reels that tell your unique story, from grand events to everyday magic. Shot on iPhone, crafted with passion, and delivered with speed.
+                </p>
+                <div class="mt-12">
+                    <div class="video-placeholder mx-auto max-w-4xl">
+                        <!-- This would be an embedded video or a custom video player -->
+                        <!-- <video controls class="absolute inset-0 w-full h-full object-cover rounded-3xl">
+                            <source src="your-showcase-reel.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video> -->
+                    </div>
+                    <p class="mt-6 text-gray-400 text-sm">
+                        *Placeholder for your main showcase reel.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services / Who Can Book Section - Now with White Background -->
+        <section id="services" class="py-16 md:py-24 bg-white-section">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-gradient">Who Can Book FLASHCLICK?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+                    <!-- Service Card 1: Brands -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Brands Launching New Products</h3>
+                        <p class="text-gray-300">
+                            Create buzz and showcase your products with high-impact, engaging reels that capture attention and drive excitement.
+                        </p>
+                    </div>
+
+                    <!-- Service Card 2: Creators/Influencers -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Creators & Influencers</h3>
+                        <p class="text-gray-300">
+                            Need fast, quality content to keep your audience engaged? We deliver fresh, dynamic reels that elevate your feed.
+                        </p>
+                    </div>
+
+                    <!-- Service Card 3: Personal Celebrations -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.11-1.554.326A18.038 18.038 0 0112 22.076C9.929 22.62 7.954 23 6 23c-1.046 0-2.092-.11-3.138-.326A18.038 18.038 0 011 15.546V8.454C1.523 8.11 2.046 8 2.554 8A18.038 18.038 0 0112 1.924C14.071 1.38 16.046 1 18 1c1.046 0 2.092.11 3.138.326A18.038 18.038 0 0121 8.454v7.092z"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Anyone Celebrating a Birthday</h3>
+                        <p class="text-gray-300">
+                            Turn your special day into a vibrant, unforgettable reel. Perfect for capturing all the joy and excitement.
+                        </p>
+                    </div>
+
+                    <!-- Service Card 4: Home Ceremonies -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Home Ceremonies</h3>
+                        <p class="text-gray-300">
+                            Preserve the intimacy and beauty of your home-based rituals and celebrations with heartfelt, cinematic reels.
+                        </p>
+                    </div>
+
+                    <!-- Service Card 5: Weddings -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Weddings</h3>
+                        <p class="text-gray-300">
+                            From grand celebrations to intimate vows, we capture the magic of your wedding day in stunning, shareable reels.
+                        </p>
+                    </div>
+
+                    <!-- Service Card 6: Any Event -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-sky-500">
+                        <svg class="service-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Any Special Occasion</h3>
+                        <p class="text-gray-300">
+                            No moment is too small or too big. If it's special to you, we're here to turn it into a captivating reel.
+                        </p>
+                    </div>
+
+                </div>
+                <p class="mt-12 text-lg text-gray-400 max-w-2xl mx-auto">
+                    "We don't just shoot - we bring life to your memories!"
+                </p>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-16 md:py-24 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-gradient">Our Latest Work</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Portfolio Item 1 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+1" alt="Reel Showcase 1" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Brand Launch Reel</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 2 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+2" alt="Reel Showcase 2" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Creator Collaboration</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 3 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+3" alt="Reel Showcase 3" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Birthday Bash Highlight</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 4 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+4" alt="Reel Showcase 4" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Home Ceremony Reel</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 5 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+5" alt="Reel Showcase 5" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Wedding Day Teaser</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 6 -->
+                    <div class="relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <img src="https://placehold.co/600x400/333/eee?text=Reel+Showcase+6" alt="Reel Showcase 6" class="w-full h-64 object-cover rounded-3xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl">
+                            <p class="text-white text-xl font-semibold">Event Highlight Reel</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="#contact" class="btn-gradient inline-block mt-12 text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg hover:shadow-xl">
+                    See More of Our Work
+                </a>
+            </div>
+        </section>
+
+        <!-- Testimonials Section - Now with White Background -->
+        <section id="testimonials" class="py-16 md:py-24 bg-white-section">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-gradient">What Our Clients Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg border border-transparent hover:border-sky-500 transition-all duration-300">
+                        <p class="text-lg text-gray-300 mb-6 italic">"FLASH CLICK captured our product launch perfectly! The reels were dynamic, engaging, and exactly what we needed to create buzz."</p>
+                        <div class="flex items-center justify-center">
+                            <img src="https://placehold.co/50x50/555/fff?text=C1" alt="Client 1" class="w-12 h-12 rounded-full mr-4 border-2 border-sky-500">
+                            <div>
+                                <p class="font-semibold text-white">Emily R.</p>
+                                <p class="text-gray-400 text-sm">Marketing Manager, TechCo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg border border-transparent hover:border-sky-500 transition-all duration-300">
+                        <p class="text-lg text-gray-300 mb-6 italic">"As a creator, I need fast and high-quality content. FLASH CLICK delivered beyond expectations, making my feed pop!"</p>
+                        <div class="flex items-center justify-center">
+                            <img src="https://placehold.co/50x50/555/fff?text=C2" alt="Client 2" class="w-12 h-12 rounded-full mr-4 border-2 border-sky-500">
+                            <div>
+                                <p class="font-semibold text-white">Jordan K.</p>
+                                <p class="text-gray-400 text-sm">Content Creator</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div class="bg-gray-800 p-8 rounded-3xl shadow-lg border border-transparent hover:border-sky-500 transition-all duration-300">
+                        <p class="text-lg text-gray-300 mb-6 italic">"Our wedding reels were absolutely magical. Every emotion, every moment beautifully captured. Thank you, FLASH CLICK!"</p>
+                        <div class="flex items-center justify-center">
+                            <img src="https://placehold.co/50x50/555/fff?text=C3" alt="Client 3" class="w-12 h-12 rounded-full mr-4 border-2 border-sky-500">
+                            <div>
+                                <p class="font-semibold text-white">Priya S.</p>
+                                <p class="text-gray-400 text-sm">Newlywed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Booking Section -->
+        <section id="contact" class="py-16 md:py-24 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-gradient">Let's Create Your Story!</h2>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300 mb-10">
+                    Ready to turn your moments into captivating reels? Fill out the form below and we'll get back to you shortly.
+                </p>
+                <div class="max-w-xl mx-auto bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-700">
+                    <form class="space-y-6">
+                        <div>
+                            <input type="text" id="name" name="name" placeholder="Your Name" class="w-full p-4 rounded-xl bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300" required>
+                        </div>
+                        <div>
+                            <input type="email" id="email" name="email" placeholder="Your Email" class="w-full p-4 rounded-xl bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300" required>
+                        </div>
+                        <div>
+                            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number (Optional)" class="w-full p-4 rounded-xl bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300">
+                        </div>
+                        <div>
+                            <select id="service-type" name="service-type" class="w-full p-4 rounded-xl bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300" required>
+                                <option value="" disabled selected>Select Service Type</option>
+                                <option value="brand-launch">Brand Launch</option>
+                                <option value="creator-content">Creator/Influencer Content</option>
+                                <option value="birthday">Birthday Celebration</option>
+                                <option value="home-ceremony">Home Ceremony</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="other-event">Other Special Event</option>
+                            </select>
+                        </div>
+                        <div>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell us more about your project or event..." class="w-full p-4 rounded-xl bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-gradient w-full py-4 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl">
+                            Send My Inquiry
+                        </button>
+                    </form>
+                    <p class="mt-8 text-gray-400 text-sm">
+                        You can also reach us directly at: <br>
+                        <a href="mailto:info@flashclickk.com" class="text-sky-400 hover:underline">info@flashclickk.com</a> | <a href="tel:+919876543210" class="text-sky-400 hover:underline">+91 98765 43210</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 text-center text-gray-500 text-sm">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2025 FLASH CLICK. All rights reserved.</p>
+            <p class="mt-2">Made with <span class="text-sky-500">&hearts;</span> in Hyderabad.</p>
+        </div>
+    </footer>
+
+    <!-- Embedded JavaScript from script.js -->
+    <script>
+        // Mobile menu toggle functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Event listener to open the mobile menu
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+        });
+
+        // Event listener to close the mobile menu
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+
+        // Add event listeners to close the mobile menu when a navigation link is clicked
+        // This ensures the menu closes after the user selects a section
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
